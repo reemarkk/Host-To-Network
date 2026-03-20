@@ -5,7 +5,7 @@ typedef union byte64 {
     unsigned char b[8];
 } byte64;
 
-long long int Hton64(long long int c) {
+long long int hton64(long long int c) {
     byte64 u;
     u.value = c;
     for (int i = 0; i < 4; i++) {
@@ -14,4 +14,16 @@ long long int Hton64(long long int c) {
         u.b[7 - i] = tmp;
     }
     return u.value;
+}
+
+long long int htonll(long long int a){
+    char *ptr1 = (char *) &a;
+    long long int temp;
+    char *ptr2 = (char *) &temp;
+
+    for(int i = 0; i < 8; i++){
+        *(ptr2 + i) = *(ptr1 + 7 - i);
+    }
+
+    return temp;
 }

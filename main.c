@@ -26,21 +26,26 @@ int main() {
 
     for (int i = 0; i < nTests; i++) {
         long long int num = testNumbers[i];
-        printf("Test %d:\n", i + 1);
+        printf(YELLOW "Test %d\n" RESET, i + 1);
         printf("Original         : "); printHex(num); printf("\n");
 
-        long long int resUnion = Hton64(num);
+        long long int resUnion = hton64(num);
         long long int resBitmask = LittleToBigEndian(num);
+        long long int resPointer = htonll(num);
 
-        printf("Union Method     : "); printHex(resUnion);
-        printf("  "); 
-        if (resUnion == resBitmask) printf(GREEN "[PASS]\n" RESET);
-        else printf(RED "[FAIL]\n" RESET);
+        // Print results
+        printf("Union Method     : "); printHex(resUnion); printf("\n");
+        printf("Bitmask Method   : "); printHex(resBitmask); printf("\n");
+        printf("Pointer Method   : "); printHex(resPointer); printf("\n");
 
-        printf("Bitmask Method   : "); printHex(resBitmask);
-        printf("  "); 
-        if (resBitmask == resUnion) printf(GREEN "[PASS]\n" RESET);
-        else printf(RED "[FAIL]\n" RESET);
+        // Check consistency
+        int passUnionBitmask = (resUnion == resBitmask);
+        int passUnionPointer = (resUnion == resPointer);
+        int passBitmaskPointer = (resBitmask == resPointer);
+
+        printf("Union vs Bitmask : %s%s%s\n", passUnionBitmask ? GREEN : RED, passUnionBitmask ? "[PASS]" : "[FAIL]", RESET);
+        printf("Union vs Pointer : %s%s%s\n", passUnionPointer ? GREEN : RED, passUnionPointer ? "[PASS]" : "[FAIL]", RESET);
+        printf("Bitmask vs Pointer : %s%s%s\n", passBitmaskPointer ? GREEN : RED, passBitmaskPointer ? "[PASS]" : "[FAIL]", RESET);
 
         printf("\n");
     }
